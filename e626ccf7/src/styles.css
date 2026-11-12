@@ -1,0 +1,375 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-brand: var(--brand);
+  --color-brand-light: var(--brand-light);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-surface-container: var(--surface-container);
+  --color-surface-low: var(--surface-low);
+  --color-ink: var(--ink);
+
+  --font-display: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-sans: "Be Vietnam Pro", system-ui, sans-serif;
+
+  --shadow-card: 0 4px 24px -8px rgb(83 0 183 / 0.12);
+  --shadow-card-hover: 0 18px 44px -12px rgb(83 0 183 / 0.22);
+  --shadow-soft: 0 2px 10px rgb(18 28 42 / 0.05);
+  --shadow-brand: 0 8px 20px -6px rgb(83 0 183 / 0.45);
+}
+
+:root {
+  --radius: 1rem;
+
+  --background: #f8f9ff;
+  --foreground: #121c2a;
+  --card: #ffffff;
+  --card-foreground: #121c2a;
+  --popover: #ffffff;
+  --popover-foreground: #121c2a;
+
+  /* NextNab purple */
+  --primary: #5300b7;
+  --primary-foreground: #ffffff;
+  --brand: #7331df;
+  --brand-light: #ebddff;
+
+  --secondary: #eff4ff;
+  --secondary-foreground: #121c2a;
+  --muted: #e6eeff;
+  --muted-foreground: #4a4455;
+  --accent: #ebddff;
+  --accent-foreground: #5300b7;
+  --destructive: #ba1a1a;
+  --destructive-foreground: #ffffff;
+
+  --border: #d9e3f6;
+  --input: #d9e3f6;
+  --ring: #7331df;
+
+  --surface-container: #e6eeff;
+  --surface-low: #eff4ff;
+  --ink: #121c2a;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+
+  ::selection {
+    background: var(--primary);
+    color: var(--primary-foreground);
+  }
+}
+
+/* Soft brand glow used behind the hero */
+@utility brand-blob {
+  position: absolute;
+  filter: blur(80px);
+  opacity: 0.55;
+  z-index: 0;
+  pointer-events: none;
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(18px, -28px) scale(1.06);
+  }
+}
+
+@utility animate-float-slow {
+  animation: float-slow 18s ease-in-out infinite;
+}
+
+/* Reference headline treatment: purple gradient clipped to text */
+@utility text-gradient {
+  background: linear-gradient(135deg, #5300b7 0%, #7331df 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---- Preloader ---- */
+@keyframes nn-splash-bar {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(320%);
+  }
+}
+
+@keyframes nn-route-bar {
+  0% {
+    transform: translateX(-100%);
+  }
+  55% {
+    transform: translateX(-10%);
+  }
+  100% {
+    transform: translateX(90%);
+  }
+}
+
+@utility animate-nn-splash-bar {
+  animation: nn-splash-bar 1.15s ease-in-out infinite;
+}
+
+@utility animate-nn-route-bar {
+  animation: nn-route-bar 1.6s ease-in-out infinite;
+}
+
+/* ============ Motion / 3D layer ============ */
+
+/* Route entrance */
+@keyframes nn-page-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.995);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+.nn-page-enter {
+  animation: nn-page-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Scroll reveal — gated on .nn-js so SSR / no-JS stays fully visible */
+.nn-js section,
+.nn-js article,
+.nn-js h1,
+.nn-js h2,
+.nn-js [data-reveal] {
+  opacity: 0;
+  transform: translateY(26px) scale(0.985);
+  filter: blur(6px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--nn-d, 0ms);
+  will-change: opacity, transform;
+}
+
+.nn-js .nn-in {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+/* Ambient aurora backdrop */
+.nn-aurora {
+  position: fixed;
+  inset: 0;
+  z-index: -10;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.nn-orb {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(70px);
+  opacity: 0.5;
+  will-change: transform;
+}
+
+.nn-orb-1 {
+  width: 46rem;
+  height: 46rem;
+  left: -12rem;
+  top: -14rem;
+  background: radial-gradient(circle at 30% 30%, #7331df, transparent 65%);
+  animation: nn-drift-1 26s ease-in-out infinite alternate;
+}
+
+.nn-orb-2 {
+  width: 38rem;
+  height: 38rem;
+  right: -10rem;
+  top: 22%;
+  background: radial-gradient(circle at 60% 40%, #006c49, transparent 65%);
+  opacity: 0.3;
+  animation: nn-drift-2 32s ease-in-out infinite alternate;
+}
+
+.nn-orb-3 {
+  width: 30rem;
+  height: 30rem;
+  left: 30%;
+  bottom: -12rem;
+  background: radial-gradient(circle at 50% 50%, #ff8a3d, transparent 62%);
+  opacity: 0.24;
+  animation: nn-drift-3 24s ease-in-out infinite alternate;
+}
+
+.nn-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgb(83 0 183 / 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(83 0 183 / 0.05) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black, transparent 70%);
+}
+
+@keyframes nn-drift-1 {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(6rem, 4rem, 0) scale(1.15);
+  }
+}
+
+@keyframes nn-drift-2 {
+  from {
+    transform: translate3d(0, 0, 0) scale(1.1);
+  }
+  to {
+    transform: translate3d(-5rem, -3rem, 0) scale(0.95);
+  }
+}
+
+@keyframes nn-drift-3 {
+  from {
+    transform: translate3d(0, 0, 0) scale(0.95);
+  }
+  to {
+    transform: translate3d(4rem, -5rem, 0) scale(1.2);
+  }
+}
+
+/* Marquee strip */
+@keyframes nn-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@utility animate-nn-marquee {
+  animation: nn-marquee 28s linear infinite;
+}
+
+/* Animated gradient headline */
+@keyframes nn-gradient-x {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@utility text-gradient-animated {
+  background: linear-gradient(110deg, #5300b7, #7331df, #006c49, #5300b7);
+  background-size: 220% 220%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: nn-gradient-x 7s ease-in-out infinite;
+}
+
+/* Floating accents */
+@keyframes nn-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-14px) rotate(2deg);
+  }
+}
+
+@utility animate-nn-float {
+  animation: nn-float 6s ease-in-out infinite;
+}
+
+@utility animate-nn-float-slow {
+  animation: nn-float 9s ease-in-out infinite;
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .nn-page-enter,
+  .nn-js section,
+  .nn-js article,
+  .nn-js h1,
+  .nn-js h2,
+  .nn-js [data-reveal] {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  .nn-orb,
+  .animate-nn-marquee,
+  .animate-nn-float,
+  .animate-nn-float-slow,
+  .text-gradient-animated {
+    animation: none !important;
+  }
+}

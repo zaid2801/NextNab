@@ -1,0 +1,52 @@
+import {
+  Apple,
+  Coffee,
+  Cookie,
+  Droplets,
+  Egg,
+  Hammer,
+  Heart,
+  Paintbrush,
+  Pill,
+  Scissors,
+  ShoppingBasket,
+  Smartphone,
+  Sparkles,
+  Store,
+  Wheat,
+  Wind,
+  Zap,
+  type LucideIcon,
+} from "lucide-react";
+
+const ICONS: Record<string, LucideIcon> = {
+  nutrition: Apple,
+  egg_alt: Egg,
+  cookie: Cookie,
+  cleaning_services: Sparkles,
+  face_retouching_natural: Heart,
+  local_cafe: Coffee,
+  grain: Wheat,
+  store: Store,
+  storefront: Store,
+  grocery: ShoppingBasket,
+  pharmacy: Pill,
+  medication: Pill,
+  bakery: Cookie,
+  bakery_dining: Cookie,
+  electronics: Smartphone,
+  devices: Smartphone,
+  electric_bolt: Zap,
+  plumbing: Droplets,
+  ac_unit: Wind,
+  spa: Scissors,
+  salon: Scissors,
+  cleaning: Sparkles,
+  carpentry: Hammer,
+  painter: Paintbrush,
+  format_paint: Paintbrush,
+};
+
+export function categoryIcon(icon: string | null | undefined, fallback: LucideIcon): LucideIcon {
+  return (icon && ICONS[icon]) || fallback;
+}
